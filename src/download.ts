@@ -1,0 +1,3 @@
+/** Keep the object URL alive while the browser starts the download. */
+export function downloadBlob(blob:Blob,filename:string){if(typeof URL.createObjectURL!=='function')throw Error('File downloads are unavailable in this browser. Open the site in a standard browser tab.');const url=URL.createObjectURL(blob);const link=document.createElement('a');link.href=url;link.download=filename;link.style.display='none';document.body.appendChild(link);try{link.click();}catch(error){URL.revokeObjectURL(url);throw error;}finally{link.remove();}setTimeout(()=>URL.revokeObjectURL(url),1000);}
+export function downloadJSON(value:unknown,filename:string){downloadBlob(new Blob([JSON.stringify(value,null,2)],{type:'application/json'}),filename);}

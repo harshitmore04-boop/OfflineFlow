@@ -1,0 +1,33 @@
+{
+  "name": "offlineflow",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc -b && vite build && node scripts/create-sw.mjs",
+    "preview": "vite preview --host 0.0.0.0",
+    "test": "node --import tsx src/engine.test.ts && node --import tsx src/library.test.ts && node --import tsx src/offline.test.ts && node --import tsx src/history.test.ts && node scripts/test-startup.mjs && node --import tsx src/ui.test.tsx && node --import tsx src/login.test.tsx && node --import tsx src/emailAuth.test.ts && node --import tsx src/emailOtp.test.tsx",
+    "test:offline": "node scripts/test-sw.mjs"
+  },
+  "dependencies": {
+    "lucide-react": "^0.468.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "recharts": "^2.15.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.0",
+    "@types/jsdom": "^30.0.0",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "@vitejs/plugin-react": "^4.4.0",
+    "fake-indexeddb": "^6.2.5",
+    "jsdom": "^30.1.1",
+    "tailwindcss": "^4.1.0",
+    "tsx": "^4.19.0",
+    "typescript": "~5.8.3",
+    "vite": "^6.3.0"
+  }
+}

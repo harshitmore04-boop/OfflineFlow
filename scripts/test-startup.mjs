@@ -1,0 +1,10 @@
+import vm from 'node:vm';
+import {readFile} from 'node:fs/promises';
+import assert from 'node:assert/strict';
+const button={disabled:false,addEventListener(_,callback){this.click=callback;}};const hint={textContent:''};let deleted=[],unregistered=0,reloaded=0;
+const own={scriptURL:'https://example.test/project/sw.js'};
+const context={document:{baseURI:'https://example.test/project/',getElementById(id){return id==='startup-repair'?button:id==='startup-hint'?hint:{};}},navigator:{onLine:false,serviceWorker:{async getRegistrations(){return [{active:own,async unregister(){unregistered++;}},{active:{scriptURL:'https://example.test/other/sw.js'},unregister(){throw Error('Other app changed');}}];}}},caches:{async keys(){return ['offlineflow-shell-old','another-app'];},async delete(key){deleted.push(key);}},location:{reload(){reloaded++;}},URL,setTimeout(){return 1;},clearTimeout(){}};
+context.window=context;
+vm.runInNewContext(await readFile('public/startup.js','utf8'),context);
+await button.click();assert.equal(reloaded,0);assert.deepEqual(deleted,[]);assert.match(hint.textContent,/Reconnect/);
+context.navigator.onLine=true;await button.click();assert.equal(unregistered,1);assert.deepEqual(deleted,['offlineflow-shell-old']);assert.equal(reloaded,1);assert.ok(!('indexedDB' in context),'Repair needs no document database access');console.log('PASS: startup repair refuses offline deletion, repairs only this app shell and leaves document storage untouched.');
