@@ -14,7 +14,7 @@ test('legacy demo sessions cannot bypass email OTP, including when configuration
  localStorage.setItem('preserve-document-state','yes');
  await act(async()=>root.render(<Login/>));
  assert.match(document.body.textContent||'',/Sign in with email OTP/);
- assert.doesNotMatch(document.body.textContent||'',/demo|Create account|Mobile/i);
+ assert.doesNotMatch(document.body.textContent||'',/demo|Mobile/i);
  assert.equal(document.querySelector('.logout-link'),null);
  assert.equal(document.querySelector('input[type="password"]'),null);
  assert.ok(document.querySelector<HTMLButtonElement>('button[type="submit"]')!.disabled);

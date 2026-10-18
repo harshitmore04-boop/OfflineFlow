@@ -18,7 +18,7 @@ export function createEmailAuth(config=authConfig,request:typeof fetch=fetch){
  function address(email:string){const value=email.trim().toLowerCase();if(value.length>254||!/^\S+@\S+\.\S+$/.test(value))throw Error('Enter a valid email address.');return value;}
  return {
   enabled:configured(config),
-  async send(email:string){await call('otp',{email:address(email),create_user:true});},
+  async send(email:string,createAccount=true){await call('otp',{email:address(email),create_user:createAccount});},
   async verify(email:string,code:string):Promise<AuthSession>{if(!/^\d{6}$/.test(code))throw Error('Enter the six-digit code from your email.');const data=await call('verify',{email:address(email),token:code,type:'email'});if(!data.access_token||!data.user?.id||data.user.email?.toLowerCase()!==address(email)||!data.user.email_confirmed_at)throw Error('The server did not return a verified email session.');return {access_token:data.access_token,expires_at:Date.now()+Number(data.expires_in||3600)*1000,user:{id:data.user.id,email:data.user.email}};},
   async validate(session:AuthSession){if(session.expires_at<=Date.now())throw Error('Your session expired. Sign in with a new code.');const user=await call('user',undefined,session.access_token);if(user.id!==session.user.id||!user.email_confirmed_at)throw Error('Your session could not be verified.');return {...session,user:{id:user.id,email:user.email}};},
   async logout(session:AuthSession){await call('logout?scope=local',{},session.access_token);},
