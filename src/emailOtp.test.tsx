@@ -6,11 +6,18 @@ const fill=async(selector:string,value:string)=>{const el=document.querySelector
 const submit=async()=>{await act(async()=>document.querySelector('form')!.dispatchEvent(new dom.window.Event('submit',{bubbles:true,cancelable:true})));};
 test('email OTP pending configuration, send, wrong code, correct code, profile and logout',async()=>{
  let root=createRoot(document.getElementById('root')!);await act(async()=>root.render(<EmailOtpLogin/>));assert.ok(document.body.textContent?.includes('setup is pending'));assert.ok(document.querySelector<HTMLButtonElement>('button[type="submit"]')!.disabled);await act(async()=>root.unmount());
- let sent=0,verified=0,revoked=0;const client=createEmailAuth({url:'https://project.supabase.co',key:'sb_publishable_test'});
- Object.assign(client,{read:()=>null,save:()=>{},clear:()=>{},send:async()=>{sent++;},verify:async(_:string,code:string)=>{verified++;if(code!=='123456')throw Error('This code is invalid or expired.');return {access_token:'token',expires_at:Date.now()+3600000,user:{id:'student',email:'student@example.com'}};},logout:async()=>{revoked++;}});
+ let sent=0,verified=0,revoked=0;const creationFlags:boolean[]=[];const client=createEmailAuth({url:'https://project.supabase.co',key:'sb_publishable_test'});
+ Object.assign(client,{read:()=>null,save:()=>{},clear:()=>{},send:async(_:string,createAccount=true)=>{sent++;creationFlags.push(createAccount);},verify:async(_:string,code:string)=>{verified++;if(code!=='123456')throw Error('This code is invalid or expired.');return {access_token:'token',expires_at:Date.now()+3600000,user:{id:'student',email:'student@example.com'}};},logout:async()=>{revoked++;}});
  root=createRoot(document.getElementById('root')!);await act(async()=>root.render(<EmailOtpLogin client={client}/>));await click('Create account');assert.ok(document.body.textContent?.includes('Create your account'));await click('Sign in with email');await fill('input[type="email"]','student@example.com');await submit();assert.equal(sent,1);assert.ok(document.body.textContent?.includes('Resend in 60s'));assert.ok(!document.body.textContent?.includes('123456'));
  await fill('input[autocomplete="one-time-code"]','000000');await submit();assert.ok(document.querySelector('[role="alert"]')?.textContent?.includes('invalid'));
  await fill('input[autocomplete="one-time-code"]','123456');await submit();assert.equal(verified,2);assert.ok(document.body.textContent?.includes('Keep what matters.'));
  await act(async()=>document.querySelector<HTMLElement>('[aria-label="Open profile"]')!.click());assert.ok(document.body.textContent?.includes('Email verified'));
- await click('Log out');assert.equal(revoked,1);assert.ok(document.body.textContent?.includes('Sign in with email OTP'));await act(async()=>root.unmount());
+ await click('Log out');assert.equal(revoked,1);assert.ok(document.body.textContent?.includes('Sign in with email OTP'));
+ assert.deepEqual(creationFlags,[false]);
+ await click('Create account');await fill('input[type="email"]','student@example.com');await submit();
+ assert.deepEqual(creationFlags,[false,true]);assert.ok(document.body.textContent?.includes('Verify email and create account'));
+ await fill('input[autocomplete="one-time-code"]','123456');await submit();
+ assert.ok(document.body.textContent?.includes('Keep what matters.'));
+ await click('Log out');assert.equal(revoked,2);
+ await act(async()=>root.unmount());
 });
