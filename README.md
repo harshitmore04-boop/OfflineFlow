@@ -37,7 +37,7 @@ Uploading source to GitHub alone does not deploy the website. Vercel builds it f
 
 ## Connect email OTP
 
-Without authentication settings, the site shows its clearly labeled demo entry flow and OTP setup-pending state. To activate OTP, configure these public connection values in Vercel's environment variables, then redeploy:
+Email OTP is the only sign-in method. Without authentication settings, sign-in stays disabled with a setup-pending message. To activate OTP, configure these public connection values in Vercel's environment variables, then redeploy:
 
 | Variable | Value from Supabase |
 | --- | --- |
@@ -86,7 +86,7 @@ The existing checks cover cache policies, file retention, browser storage, simul
 | `src/OfflineFiles.tsx` | Uploaded-file workspace |
 | `src/library.ts` | IndexedDB file storage and retention decisions |
 | `src/engine.ts` | FIFO, LRU, Smart and What-If logic |
-| `src/Login.tsx` | Demo entry and authentication routing |
+| `src/Login.tsx` | Email OTP authentication entry |
 | `src/EmailOtpLogin.tsx` | Email OTP interface |
 | `src/emailAuth.ts` | Supabase authentication requests |
 | `src/style.css` | Website styling |
