@@ -14,7 +14,7 @@ test('email OTP pending configuration, send, wrong code, correct code, profile a
  await act(async()=>document.querySelector<HTMLElement>('[aria-label="Open profile"]')!.click());assert.ok(document.body.textContent?.includes('Email verified'));
  await click('Log out');assert.equal(revoked,1);assert.ok(document.body.textContent?.includes('Sign in with email OTP'));
  assert.deepEqual(creationFlags,[false]);
- await click('Create account');await fill('input[type="email"]','student@example.com');await submit();
+ await click('Create account');await fill('input[autocomplete="name"]','Student Name');await fill('input[autocomplete="address-level2"]','Sample City');await fill('input[autocomplete="postal-code"]','123456');await fill('input[type="email"]','student@example.com');await submit();
  assert.deepEqual(creationFlags,[false,true]);assert.ok(document.body.textContent?.includes('Verify email and create account'));
  await fill('input[autocomplete="one-time-code"]','123456');await submit();
  assert.ok(document.body.textContent?.includes('Keep what matters.'));

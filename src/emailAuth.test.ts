@@ -17,3 +17,13 @@ test('sessions reject expiry and other project data; verified users have separat
  setLibraryOwner('b');assert.equal((await readLibrary()).files.length,0);assert.equal(await readFileBlob(file.id),undefined);setHistoryOwner('b');assert.equal(localStorage.getItem(history.DRAFT_KEY),null);
  setLibraryOwner('a');assert.equal(await (await readFileBlob(file.id))!.text(),'note');setHistoryOwner('a');assert.equal(localStorage.getItem(history.DRAFT_KEY),'account-a');setLibraryOwner('');setHistoryOwner('');
 });
+test('signup sends profile metadata while existing-user sign in does not change it',async()=>{
+ const profile={full_name:'Example User',place:'Sample City',postal_code:'123456',country:'India'};
+ const bodies:any[]=[];
+ const mock:typeof fetch=async(_,options)=>{bodies.push(JSON.parse(String(options?.body)));return Response.json({access_token:'token',expires_in:3600,user:{id:'student',email:'student@example.com',email_confirmed_at:'2026-10-18',user_metadata:profile}});};
+ const auth=createEmailAuth(config,mock);
+ await auth.send('student@example.com',true,profile);assert.deepEqual(bodies[0].data,profile);
+ await auth.send('student@example.com',false,profile);assert.equal(bodies[1].create_user,false);assert.equal(bodies[1].data,undefined);
+ const session=await auth.verify('student@example.com','123456');assert.deepEqual(session.user.profile,profile);
+ auth.save(session);assert.deepEqual(auth.read()?.user.profile,profile);auth.clear();
+});
