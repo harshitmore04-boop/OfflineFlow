@@ -125,3 +125,5 @@
 .campus-offline-status{display:flex;align-items:center;flex-wrap:wrap;gap:12px;border:1px solid var(--border);background:var(--accent-soft);padding:14px 18px;border-radius:10px;font-size:14px}.campus-offline-status button{margin-left:auto}
 
 .otp-entry{border-color:var(--accent);background:var(--accent-soft);font-weight:700;margin-bottom:8px}
+
+.auth-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:20px 0 24px}.auth-options button{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px;min-height:90px;padding:14px 8px;border:1px solid var(--border,#dfd4c1);border-radius:12px;background:transparent;text-align:center}.auth-options button strong{font-size:14px}.auth-options button small{font-size:11px;font-weight:400}.auth-options button.selected{background:#625431;color:#fff;border-color:#625431;box-shadow:0 3px 10px #62543120}.auth-options button:focus-visible{outline:3px solid #ab986a;outline-offset:3px}
