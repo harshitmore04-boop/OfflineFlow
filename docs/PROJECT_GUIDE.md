@@ -47,7 +47,7 @@ The production build generates `dist/sw.js` with the exact static asset list and
 
 The app displays **App saved for offline use** only after a service-worker message confirms that all expected assets are present. Each later visit rechecks readiness. If app-shell assets were removed, Retry offline setup rebuilds missing assets while online; an offline failure remains visible instead of reporting a stale success. First setup requires an online visit. Private hosting sign-in restrictions and browser service-worker support can affect setup; failed setup has a Retry control. No promise of offline availability is made while status is preparing, failed or unsupported.
 
-### Teacher demonstration
+### Classroom walkthrough
 
 1. Open the published website online, then choose Offline Files.
 2. Wait for **App saved for offline use**.
@@ -60,7 +60,7 @@ The app displays **App saved for offline use** only after a service-worker messa
 
 ## Simulator and experiment history
 
-The cache simulator retains its item-count resource model independently of the real file library. Run, step, autoplay, pause, reset, scenarios, decision inspector, network-sensitive Smart scores, What-If Lab and policy comparisons work as before. The right-side Demo mode button is removed. The light theme is the default, with a working dark-theme switch.
+The cache simulator retains its item-count resource model independently of the real file library. Run, step, autoplay, pause, reset, scenarios, decision inspector, network-sensitive Smart scores, What-If Lab and policy comparisons work as before. The light theme is the default, with a working dark-theme switch.
 
 Current-run state persists in localStorage. Completed runs are archived automatically; Save experiment stores a partial run. Experiment History retains the latest 20 saved runs, with restore, download and removal. File activity retains the latest 200 events.
 
@@ -111,6 +111,6 @@ Tests cover core FIFO/LRU/Smart correctness, byte budgets, multi-file evictions,
 
 The initial HTML displays a loading screen and Repair app loading action even if the application module cannot load. Repair requires an online connection, unregisters only this app worker and removes only offlineflow-shell caches; it never accesses IndexedDB or clears documents. A render-error screen can restart the simulator draft without clearing the file library or saved history. Saved experiments are validated before use, malformed hashes fall back to Dashboard, and offline preparation starts on every app opening. Regression checks cover malformed drafts, history and hashes, plus app-shell-only repair.
 
-## Demo account forms
+## Email OTP authentication
 
-The themed welcome page offers demo email login, mobile code login and Create account. Up to ten local demo profiles retain name, email and optional ten digit mobile number in this browser. Demo passwords are made-up form input and are never stored or verified. Mobile verification shows a code on screen; no SMS is sent. Sign in requires a previously created demo contact, or users can continue a saved profile or open the demo workspace. Logout ends only the local workspace entry state and preserves stored documents. These forms are clearly marked demo-only and provide no authentication, encryption or per-user file isolation. When the Supabase public connection variables are configured, the email OTP interface replaces the demo entry screen. See `../BREVO_EMAIL_OTP_SETUP.md` for provider setup. Real email delivery requires those external accounts to be configured and tested.
+Email OTP is the only entry to the workspace. Supabase verifies codes delivered through Brevo SMTP. There is no guest entry, local password form, mobile simulation or fallback access. Missing authentication configuration keeps sign-in disabled. Files and experiments are scoped to the verified user on this browser. Logout ends the session while retaining stored documents. See `../BREVO_EMAIL_OTP_SETUP.md` for provider configuration.

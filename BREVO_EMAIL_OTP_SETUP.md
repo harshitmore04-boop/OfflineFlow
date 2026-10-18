@@ -20,8 +20,8 @@ these build variables and rebuild the website:
 
 The connection values are public. Never place a Supabase secret/service-role key,
 Brevo API key or SMTP password in a `VITE_` variable or the website source.
-Once both public connection values are configured, the real OTP login replaces
-the demo login. Until then, the OTP screen says setup pending and cannot send codes.
+Email OTP is the only sign-in method. Both public connection values are required.
+Until configured, sign-in stays disabled with a setup-pending message.
 
 ## 2. Brevo
 
@@ -75,7 +75,7 @@ No actual delivery has been verified until the account settings above are connec
 - Offline files/experiments are separated by verified Supabase user ID. Browser
   storage remains local, unencrypted app storage, not a security boundary against
   someone controlling the browser/device or its developer tools.
-- Old demo files remain in the existing demo database; they are not automatically
+- Files from earlier versions remain in their original local database; they are not automatically
   assigned to the first real account. Re-add original files after real sign-in.
 - This does not provide cross-device file synchronization.
 - This standalone export runs on your own host. Any Vercel deployment-protection

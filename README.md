@@ -93,7 +93,7 @@ The existing checks cover cache policies, file retention, browser storage, simul
 | `scripts/create-sw.mjs` | Offline app-shell build step |
 | `vercel.json` | Vercel build settings |
 
-See [docs/PROJECT_GUIDE.md](docs/PROJECT_GUIDE.md) for the implementation details and demonstration workflow.
+See [docs/PROJECT_GUIDE.md](docs/PROJECT_GUIDE.md) for the implementation details and usage workflow.
 
 ## Storage behavior
 
